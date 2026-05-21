@@ -1,0 +1,716 @@
+/* =========================================================
+   Search Labs — Reusable Page Modules
+   ---------------------------------------------------------
+   Each .module-* block is a composable section that can be
+   dropped on any page (homepage, section landing, etc).
+   Modules use design-system.css tokens and atomic components
+   (.btn, .chip, .breadcrumb, etc) — never their own colors.
+   ---------------------------------------------------------
+   Conventions:
+   - .module-<name>             outer wrapper, full-width
+   - .module-<name>__header     title + intro paragraph block
+   - .module-<name>__body       main content area
+   - .module-<name>__aside      optional sidebar slot
+   - .module-<name>__title      module h2
+   - .module-<name>__subtitle   one-line description below title
+   - Modules sit inside .module-container (max-width-clamped row)
+   ========================================================= */
+
+/* ─── Shared scaffolding ─────────────────────────────────── */
+
+.module {
+  /* base wrapper — provides top/bottom rhythm between stacked modules */
+  padding: var(--s-64) 0;
+}
+.module + .module {
+  border-top: 1px solid var(--border);
+}
+.module-container {
+  max-width: 1512px;
+  margin: 0 auto;
+  padding: 0 var(--s-64);
+}
+.module-container--narrow {
+  max-width: 1200px;
+}
+/* Inside layout-content (side-nav already provides left edge padding),
+   the module container uses smaller side padding. */
+.layout-content .module-container {
+  padding: 0 var(--s-48);
+}
+
+/* Heading row inside a module (title + lede + optional eyebrow) */
+.module-header {
+  margin-bottom: var(--s-48);
+}
+.module-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin: 0 0 var(--s-12);
+}
+.module-header__title {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  color: var(--gray-dark);
+  margin: 0 0 var(--s-16);
+  letter-spacing: -0.01em;
+}
+.module-header__subtitle {
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+  color: var(--gray-dark);
+  margin: 0;
+  max-width: 760px;
+}
+.module-header__intro {
+  /* longer body paragraph (e.g. Tutorials module's two-paragraph intro) */
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--gray-dark);
+  margin: var(--s-24) 0 0;
+  max-width: 760px;
+}
+.module-header__intro + .module-header__intro {
+  margin-top: var(--s-12);
+}
+.module-header__intro a {
+  color: var(--blue);
+}
+.module-header__intro a:hover { text-decoration: underline; }
+
+/* Two-column body: main content on left, aside on right */
+.module-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--s-48);
+  align-items: start;
+}
+.module-body--no-aside {
+  grid-template-columns: 1fr;
+}
+.module-body--sidebar-left {
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+@media (max-width: 1100px) {
+  .module-body,
+  .module-body--sidebar-left {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Module: Tutorials ──────────────────────────────────── */
+.module-tutorials .action-row-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Module: Examples ───────────────────────────────────── */
+.module-examples .module-examples__group {
+  margin-bottom: var(--s-48);
+}
+.module-examples .module-examples__group:last-child {
+  margin-bottom: 0;
+}
+.module-examples .module-examples__group-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin: 0 0 var(--s-12);
+}
+
+/* ─── Module: Integrations ───────────────────────────────── */
+.module-integrations .module-integrations__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-24);
+}
+@media (max-width: 900px) {
+  .module-integrations .module-integrations__grid {
+    grid-template-columns: 1fr;
+  }
+}
+.module-integrations__tabs {
+  margin-bottom: var(--s-32);
+}
+
+/* ─── Module: New & Popular ──────────────────────────────── */
+.module-popular {
+  /* Layout: featured card (~2/3) + popular list (~1/3) */
+}
+.module-popular .module-popular__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--s-48);
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .module-popular .module-popular__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Module: Blog Feed ──────────────────────────────────── */
+.module-blog-feed .module-blog-feed__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-48) var(--s-32);
+}
+@media (max-width: 900px) {
+  .module-blog-feed .module-blog-feed__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Reusable atom: Action Row ──────────────────────────── */
+/* Horizontal icon + title + description row (used in Tutorials
+   module and in Examples module). Bordered, full-width, hover.
+
+   Two markup patterns:
+   - <a class="action-row"> ... </a>            (clickable whole row,
+                                                 no chip-row inside)
+   - <div class="action-row"> ... </div>        (use when chips are
+                                                 children, since
+                                                 chips are <a>'s and
+                                                 nested anchors break)
+   Wrap an <a> around just the title text in the div form. */
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-16);
+  padding: var(--s-24);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-8);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+  margin-bottom: var(--s-12);
+}
+.action-row:last-child { margin-bottom: 0; }
+.action-row:hover { border-color: var(--gray-medium); }
+.action-row:hover .action-row__title,
+.action-row:hover .action-row__title a { text-decoration: underline; }
+.action-row__icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-dark);
+  flex-shrink: 0;
+}
+.action-row__icon:empty { display: none; }
+.action-row__icon svg { width: 100%; height: 100%; }
+.action-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  flex: 1;
+  min-width: 0;
+}
+.action-row__title {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-body);
+  color: var(--gray-dark);
+  margin: 0;
+}
+.action-row__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.action-row__desc {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--gray);
+  margin: 0;
+}
+/* Variant: action-row with chips on the right (Examples module) */
+.action-row__chips {
+  display: flex;
+  gap: var(--s-8);
+  flex-shrink: 0;
+}
+
+/* ─── Reusable promo: Quick Start callout ────────────────── */
+/* Sidebar gradient card with emoji + body text + Quick Start button.
+   Used in Tutorials, Examples, and any landing-page sidebar. */
+.qs-callout {
+  background: linear-gradient(155deg, #6EBFB5 0%, #4A8EBF 55%, #5B6FE0 100%);
+  border-radius: var(--r-10);
+  padding: var(--s-24);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-16);
+}
+.qs-callout__emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+.qs-callout__text {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  line-height: var(--lh-lead);
+  color: var(--white);
+  margin: 0;
+}
+.qs-callout__text strong {
+  font-weight: var(--fw-bold);
+  color: var(--white);
+}
+.qs-callout__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-8);
+  background: var(--brand-elastic-blue);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-small);
+  padding: var(--s-12) var(--s-16);
+  border-radius: var(--r-4);
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background-color 0.15s ease;
+}
+.qs-callout__btn:hover { background: #0858C5; }
+
+/* ─── Page layout scaffolding ────────────────────────────────
+   Reserved space for site chrome that will be added later:
+   - .layout-topnav-slot  → 2 stacked top navigation bars
+   - .layout-sidenav-slot → vertical side navigation
+   - .layout-content      → page content (modules go here)
+   Slots are currently empty placeholders with subtle outlines
+   so the page composition reflects the real available space.
+   When real nav components are wired in, they fill these slots.
+   ───────────────────────────────────────────────────────── */
+.page-layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+.layout-topnav-slot {
+  /* Reserves vertical space for the two top nav bars.
+     Total: ~120 px (60 for upper utility nav + 60 for primary nav). */
+  height: 120px;
+  border-bottom: 1px dashed var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+.layout-topnav-slot__bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--s-64);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  border-bottom: 1px dashed var(--border);
+}
+.layout-topnav-slot__bar:last-child { border-bottom: none; }
+.layout-body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+}
+.layout-sidenav-slot {
+  /* Reserves horizontal space for vertical side nav.
+     240 px is the standard side-nav width across the prototype. */
+  border-right: 1px dashed var(--border);
+  padding: var(--s-32) var(--s-24);
+  background: var(--white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.layout-content {
+  /* Where modules live. Min-width: 0 so children that overflow
+     (long titles, large grids) wrap correctly. */
+  min-width: 0;
+}
+@media (max-width: 1100px) {
+  .layout-body { grid-template-columns: 1fr; }
+  .layout-sidenav-slot { display: none; }
+}
+
+/* ─── Reusable atom: Pill Tabs ───────────────────────────────
+   Horizontal row of pill-shaped tab buttons used for filtering
+   a list/grid (e.g. Integration categories). Active state is a
+   solid blue fill with white text; inactive tabs have a subtle
+   outline and inherit dark text. Use on top of any module/grid.
+   ───────────────────────────────────────────────────────── */
+.pill-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-12);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pill-tabs__item {
+  display: inline-flex;
+}
+.pill-tabs__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--s-12) var(--s-24);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  background: transparent;
+  color: var(--gray-dark);
+  border: 1px solid var(--border);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+}
+.pill-tabs__btn:hover {
+  border-color: var(--gray-medium);
+}
+.pill-tabs__btn[aria-current="page"],
+.pill-tabs__btn--active {
+  background: var(--brand-elastic-blue);
+  color: var(--white);
+  border-color: var(--brand-elastic-blue);
+  font-weight: var(--fw-semibold);
+}
+.pill-tabs__btn[aria-current="page"]:hover,
+.pill-tabs__btn--active:hover {
+  background: #0858C5;
+  border-color: #0858C5;
+}
+
+
+/* ─── Card components ────────────────────────────────────
+   Extracted from index.html into modules.css 2026-05-19
+   (Session 37) so homepage.html + any other page using
+   modules.css can render these cards. The same rules
+   ALSO remain in index.html for now to keep the prototype
+   working unchanged. Future session: dedupe by removing
+   from index.html once we link modules.css there too.
+   ───────────────────────────────────────────────────── */
+
+.related-card {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-16);
+  }
+
+.related-card__image {
+    height: 260px;
+    background: var(--gray-lightest);
+    border: 1px solid var(--border);
+    border-radius: var(--r-8);
+  }
+
+.related-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-16);
+    flex: 1;
+  }
+
+.related-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--s-16);
+    flex-wrap: wrap;
+  }
+
+.related-card__date {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.02em;
+    color: var(--gray);
+  }
+
+.related-card__title {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h4);
+    line-height: var(--lh-h4);
+    color: var(--gray-dark);
+    margin: 0;
+  }
+
+.related-card__title a:hover { text-decoration: underline; }
+
+.related-card__desc {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+    color: var(--gray-dark);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+.related-card__author {
+    display: flex;
+    align-items: center;
+    gap: var(--s-12);
+    margin-top: auto;
+  }
+
+.related-card__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-full);
+    background: var(--surface-neutral-1-5);
+    color: var(--text-subtler);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    flex-shrink: 0;
+  }
+
+.related-card__author-name {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    color: var(--text-subtler);
+  }
+
+.related-card__author-name a {
+    color: var(--gray-dark);
+    font-weight: var(--fw-semibold);
+  }
+
+.related-card__author-name a:hover { text-decoration: underline; }
+
+.featured {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--r-10);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+.featured__image {
+    height: 433px;
+    background: var(--gray-lightest);
+    border-bottom: 1px solid var(--border);
+    /* Intentionally blank — user will add the background image later */
+  }
+
+.featured__body {
+    padding: var(--s-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-16);
+  }
+
+.featured__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--s-24);
+  }
+
+.featured__date {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.02em;
+    color: var(--gray);
+  }
+
+.featured__title {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h4);
+    line-height: var(--lh-h4);
+    color: var(--gray-dark);
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+.featured__title a { color: inherit; text-decoration: none; }
+
+.featured__title a:hover { text-decoration: underline; }
+
+.featured__image { height: 240px; }
+
+.featured__title { font-size: 20px; }
+
+.popular {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-16);
+  }
+
+.popular__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+.popular__item {
+    padding: var(--s-24) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-16);
+  }
+
+.popular__item:first-child {
+    padding-top: 0;
+  }
+
+.popular__item + .popular__item {
+    border-top: 1px solid var(--border);
+  }
+
+.popular__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-24);
+    flex-wrap: wrap;
+  }
+
+.popular__chips {
+    display: flex;
+    gap: var(--s-8);
+  }
+
+.popular__date {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.02em;
+    color: var(--gray);
+  }
+
+.popular__title {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h5);
+    line-height: var(--lh-h5);
+    color: var(--gray-dark);
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+.popular__title a:hover { text-decoration: underline; }
+
+.popular__share {
+    margin-top: var(--s-24);
+    padding-top: var(--s-24);
+    border-top: 1px solid var(--border);
+  }
+
+.popular__share-label {
+    font-family: var(--font-mono);
+    font-weight: var(--fw-bold);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin: 0 0 var(--s-12) 0;
+  }
+
+.popular__share-icons {
+    display: flex;
+    gap: var(--s-16);
+  }
+
+.popular__share-icons a {
+    color: var(--gray);
+    transition: color 0.15s ease;
+    display: inline-flex;
+  }
+
+.popular__share-icons a:hover { color: var(--gray-dark); }
+
+.popular__share-icons svg { width: 20px; height: 20px; }
+
+.integration-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--r-8);
+    padding: var(--s-24);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--s-16);
+    transition: border-color 0.15s ease;
+  }
+
+.integration-card:hover { border-color: var(--gray-medium); }
+
+.integration-card:hover .integration-card__name { text-decoration: underline; }
+
+.integration-card__logo {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-neutral-1-5);
+    color: var(--brand-elastic-blue);
+    border-radius: var(--r-4);
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: var(--fw-bold);
+    letter-spacing: 0;
+  }
+
+.integration-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-8);
+    flex: 1;
+    min-width: 0;
+  }
+
+.integration-card__name {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-h5);
+    line-height: var(--lh-h5);
+    color: var(--gray-dark);
+    margin: 0;
+  }
+
+.integration-card__desc {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+    color: var(--gray);
+    margin: 0;
+  }
+
+.integration-card__category {
+    font-family: var(--font-mono);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-label-s);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin: 0;
+    margin-top: var(--s-8);
+  }

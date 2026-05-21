@@ -1,0 +1,508 @@
+/* =========================================================
+   Elastic Blogs — Shared Design System
+   ---------------------------------------------------------
+   Source of truth for design tokens and core components.
+   Linked from both index.html (prototype) and
+   components.html (component library docs).
+
+   Currently extracted:
+     - Design tokens (:root)
+     - Button system (.btn--primary / --secondary / --tertiary)
+     - Chip / tag (.chip, a.chip)
+
+   Other component CSS still lives inline in index.html and
+   will migrate here incrementally.
+   ========================================================= */
+
+/* ╔═══════════════════════════════════════════════════════════════╗
+   ║  ⚠ KNOWN DEVIATIONS FROM LIBRARY SPEC                          ║
+   ║  ─────────────────────────────────────────────────────────────  ║
+   ║                                                                 ║
+   ║  This token system is mostly aligned to the Elastic Design      ║
+   ║  System library (Figma: Design-System-Tokens-and-Variables).    ║
+   ║  Below are INTENTIONAL deviations — flagged here so they are     ║
+   ║  visible to anyone reading this file. Each one is also          ║
+   ║  documented in MIGRATION.md with the session that introduced    ║
+   ║  it and the rationale.                                          ║
+   ║                                                                 ║
+   ║  ┌─────────────────────────────────────────────────────────────┐ ║
+   ║  │ #1  --fw-bold: 700 (library says 800 ExtraBold)             │ ║
+   ║  │                                                             │ ║
+   ║  │     Library binds Display / Headline / Title weights to     │ ║
+   ║  │     800 (ExtraBold). We use 700 (Bold) instead — chose      │ ║
+   ║  │     for visual preference; ExtraBold read too heavy in      │ ║
+   ║  │     our layout context.                                     │ ║
+   ║  │                                                             │ ║
+   ║  │     Mier B ExtraBold IS loaded and available — to revert    │ ║
+   ║  │     to library spec, change --fw-bold: 700 → 800 in the     │ ║
+   ║  │     :root block below.                                      │ ║
+   ║  │                                                             │ ║
+   ║  │     Source: Session 22, 2026-05-15.                         │ ║
+   ║  └─────────────────────────────────────────────────────────────┘ ║
+   ║                                                                 ║
+   ╚═══════════════════════════════════════════════════════════════╝ */
+
+/* =========================================================
+   Mier B — Elastic brand heading typeface
+   ---------------------------------------------------------
+   Self-hosted alongside this CSS file (woff2 + woff). All 10
+   weight/style combinations declared; the actual rules that
+   reach for Mier B reference it via --font-heading.
+
+   font-display: swap — heads render in the fallback (Inter)
+   immediately and swap to Mier B when the font is ready.
+   No FOIT (flash of invisible text), just FOUT.
+
+   Weight mapping (CSS weight ← Mier B variant):
+     400  Regular            ←  MierB-Regular
+     400  Regular italic     ←  MierB-Italic
+     600  Demi (SemiBold)    ←  MierB-Demi
+     600  Demi italic        ←  MierB-DemiItalic
+     700  Bold               ←  MierB-Bold
+     700  Bold italic        ←  MierB-BoldItalic
+     800  ExtraBold          ←  MierB-ExtraBold
+     800  ExtraBold italic   ←  MierB-ExtraBoldItalic
+     900  Heavy              ←  MierB-Heavy
+     900  Heavy italic       ←  MierB-HeavyItalic
+
+   ADDED 2026-05-15 (Session 20). Closes the workstream flagged
+   in Session 19 (--font-heading was referencing Mier B but the
+   font wasn't loaded, so headings rendered in Inter fallback).
+   ========================================================= */
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-Regular.woff2') format('woff2'),
+       url('MierB-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-Italic.woff2') format('woff2'),
+       url('MierB-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-Demi.woff2') format('woff2'),
+       url('MierB-Demi.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-DemiItalic.woff2') format('woff2'),
+       url('MierB-DemiItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-Bold.woff2') format('woff2'),
+       url('MierB-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-BoldItalic.woff2') format('woff2'),
+       url('MierB-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-ExtraBold.woff2') format('woff2'),
+       url('MierB-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-ExtraBoldItalic.woff2') format('woff2'),
+       url('MierB-ExtraBoldItalic.woff') format('woff');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-Heavy.woff2') format('woff2'),
+       url('MierB-Heavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mier B';
+  src: url('MierB-HeavyItalic.woff2') format('woff2'),
+       url('MierB-HeavyItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* =========================================================
+   Design tokens
+   ---------------------------------------------------------
+   All tokens map to Elastic Design System library slots
+   (Figma: Design-System-Tokens-and-Variables-Test-AI).
+   Per-token comments show only the library slot name and
+   the token's role. Migration history, deltas, and revert
+   paths live in MIGRATION.md.
+
+   Section order:
+     1. Color — surfaces, text, brand
+     2. Color — legacy aliases (Search Labs → new system)
+     3. Typography — families, weights, scale
+     4. Spacing — 8-pt scale
+     5. Radius
+   ========================================================= */
+:root {
+
+  /* ─── COLOR — SURFACES ─────────────────────────────────────
+     Two parallel families (Neutral + Brand), light → dark.
+     Pre-vetted for WCAG AA/AAA per library Rule #1.
+     ──────────────────────────────────────────────────────── */
+
+  /* Neutral surfaces (light → dark) */
+  --surface-neutral-1:        #FFFFFF;   /* White 0          — base light surface, page bg */
+  --surface-neutral-1-5:      #F1F4F8;   /* Gray 25          — hover surfaces, code blocks */
+  --surface-neutral-2:        #E2E3E7;   /* Gray 50          — subtle section bg, hero panels */
+  --surface-neutral-3:        #C4C7D1;   /* Gray 200         — accent / hairline-as-surface */
+  --surface-neutral-dark-1:   #373A45;   /* Gray 800         — dark surface (lighter shade) */
+  --surface-neutral-dark-2:   #1D1F26;   /* Gray 1000        — dark surface */
+  --surface-neutral-dark-3:   #000000;   /* Black 1000       — deepest dark surface, footer */
+
+  /* Brand surfaces (light blues → dark blues) */
+  --surface-brand-1:          #D9E8FF;   /* Blue E 50        — lightest brand surface */
+  --surface-brand-2:          #BFDBFF;   /* Blue E 100       — light brand surface */
+  --surface-brand-3:          #A3CBFF;   /* Blue E 200       — deepest pale brand surface */
+  --surface-brand-dark-1:     #123778;   /* Blue E 800       — dark brand surface (lighter) */
+  --surface-brand-dark-2:     #0D2F5E;   /* Blue E 900       — dark brand surface */
+  --surface-brand-dark-3:     #0A2342;   /* Blue E 1000      — deepest dark brand surface */
+
+
+  /* ─── COLOR — TEXT ─────────────────────────────────────────
+     Three tones on light surfaces + three on dark.
+     Pre-paired with surfaces for WCAG AA/AAA contrast.
+     ──────────────────────────────────────────────────────── */
+  --text-default:             #1D1F26;   /* Primary text   on light surfaces */
+  --text-subtler:             #373A45;   /* Secondary text on light surfaces */
+  --text-subtlest:            #474B57;   /* Tertiary text  on light surfaces (AAA on white) */
+  --text-inverse-default:     #E2E3E7;   /* Primary text   on dark surfaces */
+  --text-inverse-subtler:     #C4C7D1;   /* Secondary text on dark surfaces */
+  --text-inverse-subtlest:    #B2B6C2;   /* Tertiary text  on dark surfaces */
+
+
+  /* ─── COLOR — BRAND ────────────────────────────────────────
+     Chrome and accent colors, not part of surface system.
+     ──────────────────────────────────────────────────────── */
+  --brand-elastic-blue:         #0B64DD; /* Primary brand blue — buttons, links, chips */
+  --brand-elastic-yellow:       #FEC514; /* Brand yellow — legacy decorative */
+  --brand-elastic-yellow-dark:  #FDC031;
+  --brand-elastic-yellow-light: #FFDA3D;
+
+
+  /* ─── COLOR — LEGACY ALIASES ───────────────────────────────
+     Search Labs originals, redirected to new tokens. Keeps
+     existing var() references rendering during the migration.
+     New code should use the canonical names above. Each line
+     shows: new target + usage count (last audit).
+     Full pre→post deltas live in MIGRATION.md.
+     ──────────────────────────────────────────────────────── */
+  --white:          var(--surface-neutral-1);          /*  39 uses */
+  --black:          var(--surface-neutral-dark-3);     /*  11 uses */
+  --footer-bg:      var(--surface-neutral-dark-3);     /*   0 uses */
+  --gray-dark:      var(--text-default);               /*  82 uses — primary body text */
+  --gray:           var(--text-subtlest);              /* 137 uses — secondary text */
+  --gray-medium:    var(--surface-neutral-3);          /*   5 uses */
+  --gray-lightest:  var(--surface-neutral-2);          /*  12 uses — section bg */
+  --border:         var(--surface-neutral-3);          /*  52 uses — hairlines */
+  --hero-bg:        var(--surface-neutral-1-5);        /*   6 uses — default; sections override below */
+
+  /* ─── HERO BACKGROUNDS — SECTION-THEMED ────────────────────
+     Added 2026-05-15 Session 32. Each section (Search Labs default,
+     Observability, Security, News) has its own hero color so the
+     `.hero` (home variant) and `.subpage-hero` (tag / filter /
+     article / author variants) within that section match.
+     The rules that bind page-views to tokens live in index.html.
+     ─────────────────────────────────────────────────────────── */
+  --hero-bg-home:    #F2F4F7;   /* Search Labs home — preserved from prior literal */
+  --hero-bg-blog:    var(--surface-neutral-1-5);   /* Blog / Tutorials / Examples — uses default lighter gray */
+  --hero-bg-obs:     #E8ECF1;   /* Observability — slight cool gray, preserved from prior literal on obs-home */
+  --hero-bg-sec:     #EBEFF3;   /* Security — slight cool gray, preserved from prior literal on sec-home */
+  --hero-bg-news:    #F5F1EA;   /* News — warm beige, distinct from blue-tinted family above */
+
+  --primary:        var(--brand-elastic-yellow);       /*   1 use */
+  --primary-dark:   var(--brand-elastic-yellow-dark);  /*   1 use */
+  --yellow-light:   var(--brand-elastic-yellow-light); /*   0 uses */
+  --blue:           var(--brand-elastic-blue);         /*  22 uses */
+
+
+  /* ─── TYPOGRAPHY — FAMILIES ────────────────────────────────
+     Mier B is the Elastic brand heading typeface (10 weights
+     loaded via @font-face at top of file). Inter is the body
+     UI font (Google Fonts). Roboto Mono is the code font.
+     ──────────────────────────────────────────────────────── */
+  --font-heading: 'Mier B', 'Inter', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'Roboto Mono', ui-monospace, monospace;
+
+
+  /* ─── TYPOGRAPHY — WEIGHTS ─────────────────────────────────
+     Four canonical weights + one semantic alias.
+
+     ⚠ --fw-bold deviates from library spec (700 vs library's 800).
+        See KNOWN DEVIATIONS banner at top of this file.
+     ──────────────────────────────────────────────────────── */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;   /* ⚠ Library says 800 (ExtraBold); see top banner */
+
+  --fw-body:     500;   /* Semantic alias for <body> (experiment isolation) */
+
+
+  /* ─── TYPOGRAPHY — SCALE ───────────────────────────────────
+     Font size + matching line-height, paired per token.
+     Library slot names are noted; full library has more sizes
+     (Display, Oversize, Headline-M) which we don't currently
+     use and haven't introduced.
+     ──────────────────────────────────────────────────────── */
+  --fs-h2:      40px;    --lh-h2:      1.2;     /* Headline Large    40 / 48   */
+  --fs-h3:      32px;    --lh-h3:      1.2;     /* Headline Small    32 / 38.4 */
+  --fs-title-l: 28px;    --lh-title-l: 1.3;     /* Title Large       28 / 36.4 */
+  --fs-h4:      25px;    --lh-h4:      1.3;     /* Title Medium      25 / 32.5 */
+  --fs-h5:      22px;    --lh-h5:      1.3;     /* Title Small       22 / 28.6 */
+  --fs-lead:    18px;    --lh-lead:    1.5;     /* Body XLarge       18 / 27   — hero subtitles, lead prose */
+  --fs-link:    16px;    --lh-link:    1.5;     /* Label XLarge      16 / 24   — links, button labels */
+  --fs-body:    16px;    --lh-body:    1.5;     /* Body Large        16 / 24   — default body text */
+  --fs-small:   14px;    --lh-small:   1.5;     /* Body Medium       14 / 21   — metadata, captions */
+  --fs-xs:      12px;    --lh-xs:      1.5;     /* Body Small        12 / 18   — fine print */
+  --fs-label-s: 11px;    --lh-label-s: 1.5;     /* Label Small       11 / 16.5 — mono category tags */
+
+
+  /* ─── SPACING ──────────────────────────────────────────────
+     8-pt scale. Every value is an exact match to a library
+     dimension primitive (Δ 0 across the board).
+     ──────────────────────────────────────────────────────── */
+  --s-4:   4px;
+  --s-8:   8px;
+  --s-12: 12px;
+  --s-16: 16px;
+  --s-24: 24px;
+  --s-32: 32px;
+  --s-48: 48px;
+  --s-64: 64px;
+
+
+  /* ─── RADIUS ───────────────────────────────────────────────
+     Three exact matches; --r-10 is aliased to --r-8 (no library
+     match for 10px; consolidated).
+     ──────────────────────────────────────────────────────── */
+  --r-4:    4px;
+  --r-8:    8px;
+  --r-10:   var(--r-8);   /* aliased — was 10px pre-migration */
+  --r-full: 9999px;       /* pills, chips, avatars */
+}
+
+/* =========================================================
+   Button system
+   ---------------------------------------------------------
+   .btn--primary   → Solid blue + white text
+   .btn--secondary → Transparent + blue border + blue text
+   .btn--tertiary  → Underlined blue text, no background
+   ========================================================= */
+.btn--primary,
+.btn--secondary,
+.btn--tertiary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-4);
+  height: 40px;
+  padding: 0 var(--s-16);
+  border-radius: var(--r-4);
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.btn--primary {
+  background: var(--brand-elastic-blue);
+  color: #fff;
+  border-color: var(--brand-elastic-blue);
+}
+.btn--primary:hover {
+  background: #0855BD;
+  border-color: #0855BD;
+}
+.btn--secondary {
+  background: transparent;
+  color: var(--brand-elastic-blue);
+  border-color: var(--brand-elastic-blue);
+}
+.btn--secondary:hover {
+  background: rgba(11, 100, 221, 0.06);
+}
+.btn--tertiary {
+  background: transparent;
+  color: var(--brand-elastic-blue);
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0 var(--s-4);
+  height: auto;
+}
+.btn--tertiary:hover { color: #0855BD; }
+
+/* =========================================================
+   Chip / tag
+   ========================================================= */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-4);
+  height: 28px;
+  padding: var(--s-4) 10px;
+  border: 1px solid rgba(29, 31, 38, 0.2);
+  border-radius: var(--r-full);
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: 14px;
+  line-height: 1.4;
+  color: #404152;
+  white-space: nowrap;
+  background: #EDF1F5;
+  text-decoration: none;
+}
+.chip--ghost {
+  background: transparent;
+}
+a.chip { cursor: pointer; transition: background-color 0.15s ease; }
+a.chip:hover { background: #E1E6EB; }
+
+/* =========================================================
+   Chip — Input variant
+   ---------------------------------------------------------
+   Source: Figma node 2704:20245 (Components — Designers Area).
+   The "Input" style of chip: represents a removable value in
+   a filter tray, search input, or token field. Includes a
+   trailing close (×) icon that removes the chip when clicked.
+
+   Larger than the default .chip — 32 px tall instead of 28,
+   Body Large (16 px) instead of small (14 px), and darker
+   text color for better contrast on the active-filter context.
+
+   Compose:  class="chip chip--input"
+   With JS:  wire .chip__close button to remove the parent .chip
+   ========================================================= */
+.chip--input {
+  height: 32px;
+  padding: var(--s-4) var(--s-8);
+  font-size: var(--fs-link);     /* 16 px (Body Large) */
+  line-height: var(--lh-link);   /* 1.5 → 24 px */
+  color: var(--text-default);    /* #1D1F26 — Figma uses #14141b; using token for consistency */
+  gap: var(--s-4);
+}
+.chip__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  border-radius: var(--r-full);
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+  opacity: 0.7;
+}
+.chip__close:hover  { opacity: 1; background: rgba(29, 31, 38, 0.08); }
+.chip__close:focus-visible { outline: 2px solid var(--brand-elastic-blue); outline-offset: 1px; }
+.chip__close svg { display: block; width: 12px; height: 12px; }
+
+/* =========================================================
+   Divider
+   ---------------------------------------------------------
+   Source: Figma node 1629:1125 (Components — Designers Area
+   file Nsk35nyWrPgLKUo9ah4mD4). A 1 px horizontal hairline.
+   Figma binds the line color to rgba(29,31,38,0.2) — a semi-
+   transparent dark overlay. This implementation uses the
+   migrated --border token (solid #C4C7D1) for consistency
+   with the rest of the token system; the two render nearly
+   identically on white backgrounds. To switch to the Figma
+   semi-transparent value, replace var(--border) below with
+   rgba(29, 31, 38, 0.2).
+   ========================================================= */
+.divider {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: var(--border);
+  border: none;
+  margin: 0;
+}
+
+/* =========================================================
+   Breadcrumb
+   ---------------------------------------------------------
+   Source: Figma node 1676:4101 (Components — Designers Area).
+   Inline-flex sequence of items separated by " / ". Non-current
+   items render in --text-subtlest (gray); the current / final
+   item uses --brand-elastic-blue. Inter Medium 14 px / 21 px
+   line-height (label/L). Items may carry optional 16 px leading
+   and trailing icons; the inline-flex + gap layout handles them
+   automatically.
+   ---------------------------------------------------------
+   This is a NEW component. The existing per-hero breadcrumb
+   styles in index.html (.article-hero__crumb, .tutorial-hero__crumb)
+   are different visual languages (mono font, uppercase, brand
+   blue throughout) and are not migrated to this component.
+   ========================================================= */
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-small);     /* 14 px */
+  line-height: var(--lh-small);   /* 1.5 ratio → 21 px */
+  letter-spacing: 0;
+  gap: var(--s-4);
+}
+.breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-4);
+  color: var(--text-subtlest);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+a.breadcrumb__item:hover { text-decoration: underline; }
+.breadcrumb__item--current {
+  color: var(--brand-elastic-blue);
+  cursor: default;
+}
+.breadcrumb__sep {
+  color: var(--text-subtlest);
+  user-select: none;
+  /* Slash sits naturally between items thanks to the parent's gap. */
+}
