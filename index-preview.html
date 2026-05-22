@@ -261,6 +261,16 @@
   --yellow-light:   var(--brand-elastic-yellow-light); /*   0 uses */
   --blue:           var(--brand-elastic-blue);         /*  22 uses */
 
+  /* ─── LAB ACCENT ───────────────────────────────────────────
+     Default link / active-state color, switched per-lab via
+     body[data-lab="..."] overrides below the chip rules.
+     Used on: article body links, side-nav active item, TOC
+     active, sidebar active, filter-pill active, pagination
+     active, integration-detail bloglist hover, tutorial-content
+     links. The fallback (no data-lab) keeps Elastic Blue. */
+  --lab-accent:     var(--blue);
+
+
 
   /* ─── TYPOGRAPHY — FAMILIES ────────────────────────────────
      Mier B is the Elastic brand heading typeface (10 weights
@@ -396,7 +406,7 @@
   border: 1px solid rgba(29, 31, 38, 0.2);
   border-radius: var(--r-full);
   font-family: var(--font-body);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   font-size: 14px;
   line-height: 1.4;
   color: #404152;
@@ -420,7 +430,7 @@ a.chip:hover { background: #E1E6EB; }
    ───────────────────────────────────────────────────────────── */
 body[data-lab="elasticsearch"] .chip {
   background: #FFFFFF;
-  border-color: #117F83;
+  border-color: #118185;
   color: #118185;
 }
 body[data-lab="observability"] .chip {
@@ -438,6 +448,18 @@ body[data-lab="company"] .chip {
   border-color: #0B64DD;
   color: #0B64DD;
 }
+
+/* ─── Per-lab link / active-state accent ───────────────────────
+   Switches --lab-accent based on which lab the user is on.
+   Colors match the chip palette (unified per-lab color used everywhere).
+   All selectors using `var(--lab-accent)` will recolor without
+   any per-selector overrides needed.
+
+   ───────────────────────────────────────────────────────────── */
+body[data-lab="elasticsearch"] { --lab-accent: #118185; }
+body[data-lab="observability"] { --lab-accent: #DD0A73; }
+body[data-lab="security"]      { --lab-accent: #C34C37; }
+body[data-lab="company"]       { --lab-accent: #0B64DD; }
 
 /* =========================================================
    Chip — Input variant
@@ -541,7 +563,7 @@ body[data-lab="company"] .chip {
 }
 a.breadcrumb__item:hover { text-decoration: underline; }
 .breadcrumb__item--current {
-  color: var(--brand-elastic-blue);
+  color: var(--lab-accent);
   cursor: default;
 }
 .breadcrumb__sep {
@@ -665,9 +687,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     background: var(--white);
     color: var(--black);
   }
-  .topnav__link.is-active[data-topnav="elasticsearch"] { border-color: #02BCB7; }
-  .topnav__link.is-active[data-topnav="observability"] { border-color: #F04E98; }
-  .topnav__link.is-active[data-topnav="security"]      { border-color: #FA744E; }
+  .topnav__link.is-active[data-topnav="elasticsearch"] { border-color: #118185; }
+  .topnav__link.is-active[data-topnav="observability"] { border-color: #DD0A73; }
+  .topnav__link.is-active[data-topnav="security"]      { border-color: #C34C37; }
   .topnav__link.is-active[data-topnav="company"]       { border-color: #0B64DD; }
 
   /* ─── Lab dropdown — replaces the 4-tab topnav list on inner/article pages ──
@@ -798,9 +820,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   /* Sub-nav underline color follows the active lab. Matches the 4 brand
      colors used on the topnav pill outlines (data-topnav). */
-  body[data-lab="elasticsearch"] .subnav__link.is-active::after { background: #02BCB7; }
-  body[data-lab="observability"] .subnav__link.is-active::after { background: #F04E98; }
-  body[data-lab="security"]      .subnav__link.is-active::after { background: #FA744E; }
+  body[data-lab="elasticsearch"] .subnav__link.is-active::after { background: #118185; }
+  body[data-lab="observability"] .subnav__link.is-active::after { background: #DD0A73; }
+  body[data-lab="security"]      .subnav__link.is-active::after { background: #C34C37; }
   body[data-lab="company"]       .subnav__link.is-active::after { background: #0B64DD; }
   /* Disabled (Company categories): non-interactive, slightly muted */
   .subnav__link.is-disabled {
@@ -1003,7 +1025,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-weight: var(--fw-bold);
     font-size: var(--fs-link);
     line-height: var(--lh-link);
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     margin-top: var(--s-8);
   }
   .view-all:hover { text-decoration: underline; }
@@ -1076,7 +1098,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .blog-tabs button:hover:not(.is-active) { color: var(--gray-dark); }
   .blog-tabs button.is-active {
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
   }
   .blog-tabs button.is-active::after {
@@ -1084,7 +1106,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     position: absolute;
     left: 0; right: 0; bottom: -1px;
     height: 2px;
-    background: var(--brand-elastic-blue);
+    background: var(--lab-accent);
   }
 
   /* Series grid — 3 columns, simple image + title + description card */
@@ -1176,7 +1198,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .glossary-alphabet button:hover:not([disabled]) { color: var(--gray-dark); }
   .glossary-alphabet button.is-active {
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
     position: relative;
   }
@@ -1185,7 +1207,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     position: absolute;
     left: -4px; right: -4px; bottom: -17px;
     height: 2px;
-    background: var(--brand-elastic-blue);
+    background: var(--lab-accent);
   }
   .glossary-alphabet button[disabled] {
     color: #D4DAE5;
@@ -1211,7 +1233,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-family: var(--font-heading);
     font-weight: var(--fw-bold);
     font-size: 40px;
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     margin-bottom: var(--s-24);
   }
   .glossary-toc {
@@ -1229,7 +1251,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     cursor: pointer;
     transition: color 0.15s ease;
   }
-  .glossary-toc a:hover { color: var(--brand-elastic-blue); }
+  .glossary-toc a:hover { color: var(--lab-accent); }
   .glossary-defs {
     display: flex;
     flex-direction: column;
@@ -1818,7 +1840,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-weight: var(--fw-bold);
     font-size: var(--fs-xs);
     letter-spacing: 0.02em;
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     margin: 0 0 var(--s-16) 0;
   }
   .article-hero__crumb a { color: inherit; text-decoration: none; }
@@ -1935,7 +1957,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-weight: var(--fw-bold);
   }
   .article__main a {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-semibold);
   }
   .article__main a:hover { text-decoration: underline; }
@@ -2045,9 +2067,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .sidebar__links a:hover { text-decoration: underline; }
   .sidebar__links a.is-active {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
-    border-left: 2px solid var(--blue);
+    border-left: 2px solid var(--lab-accent);
     margin-left: -18px;
     padding-left: var(--s-16);
   }
@@ -2262,7 +2284,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     margin: 0 0 var(--s-16) 0;
   }
   .tutorials-intro a {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-semibold);
   }
   .tutorials-intro a:hover { text-decoration: underline; }
@@ -2383,9 +2405,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .filter-pill:hover { border-color: var(--gray-medium); }
   .filter-pill.is-active {
-    background: rgba(47, 174, 234, 0.08);
-    border-color: var(--blue);
-    color: var(--blue);
+    background: color-mix(in srgb, var(--lab-accent) 8%, transparent);
+    border-color: var(--lab-accent);
+    color: var(--lab-accent);
   }
   .integration-grid {
     max-width: 1512px;
@@ -2424,7 +2446,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     align-items: center;
     justify-content: center;
     background: var(--surface-neutral-1-5);
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     border-radius: var(--r-4);
     flex-shrink: 0;
     font-size: 13px;
@@ -2497,7 +2519,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .blog-categories__list a:hover { text-decoration: underline; }
   .blog-categories__list a.is-active {
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
   }
 
@@ -2531,6 +2553,11 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     padding: 0 0 6px 0;
     text-align: left;
     width: 100%;
+  }
+  /* Expanded group label picks up the lab's chip color so the user
+     sees which group is open at a glance. Border stays gray. */
+  .side-nav__group-label[aria-expanded="true"] {
+    color: var(--lab-accent);
   }
   .side-nav__group-label .side-nav__chevron {
     width: 10px; height: 10px;
@@ -2568,7 +2595,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .side-nav__row:hover { color: var(--black); }
   .side-nav__row.is-active {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
   }
   .side-nav__row .side-nav__chevron {
@@ -2599,7 +2626,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .side-nav__sublist .side-nav__row:hover { color: var(--gray-dark); }
   .side-nav__sublist .side-nav__row.is-active {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-semibold);
   }
 
@@ -2610,9 +2637,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     gap: var(--s-8);
     height: 40px;
     padding: 0 18px;
-    border: 1px solid var(--brand-elastic-blue);
+    border: 1px solid var(--lab-accent);
     border-radius: 6px;
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     font-family: var(--font-body);
     font-weight: var(--fw-semibold);
     font-size: 15px;
@@ -2621,7 +2648,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     align-self: flex-start;
     transition: background 0.15s ease;
   }
-  .side-nav__subscribe:hover { background: rgba(11,100,221,0.06); }
+  .side-nav__subscribe:hover { background: color-mix(in srgb, var(--lab-accent) 6%, transparent); }
   /* 2 side-by-side action buttons at bottom of side-nav (replacement for single Subscribe) */
   .side-nav__btn-pair {
     display: flex;
@@ -2886,7 +2913,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-weight: var(--fw-bold);
     font-size: 13px;
     letter-spacing: 0.08em;
-    color: var(--blue);
+    color: var(--lab-accent);
     margin: 0 0 var(--s-12) 0;
     text-transform: uppercase;
   }
@@ -2998,7 +3025,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     text-decoration: underline;
     font-weight: var(--fw-medium);
   }
-  .integration-detail__bloglist a:hover { color: var(--blue); }
+  .integration-detail__bloglist a:hover { color: var(--lab-accent); }
   .integration-detail__body {
     font-family: var(--font-body);
     font-size: 16px;
@@ -3058,8 +3085,8 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .pagination button:hover { border-color: var(--gray-medium); }
   .pagination button.is-active {
-    background: var(--blue);
-    border-color: var(--blue);
+    background: var(--lab-accent);
+    border-color: var(--lab-accent);
     color: var(--white);
   }
 
@@ -3098,7 +3125,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     font-weight: var(--fw-bold);
     font-size: var(--fs-xs);
     letter-spacing: 0.04em;
-    color: var(--brand-elastic-blue);
+    color: var(--lab-accent);
     margin: 0 0 var(--s-16) 0;
     text-transform: uppercase;
   }
@@ -3176,7 +3203,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .tutorial-toc a:hover { color: var(--black); }
   .tutorial-toc a.is-active {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-bold);
   }
   .tutorial-toc__group {
@@ -3221,7 +3248,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .tutorial-content p strong { font-weight: var(--fw-bold); }
   .tutorial-content a:not(.tutorial-pagination__prev):not(.tutorial-pagination__next) {
-    color: var(--blue);
+    color: var(--lab-accent);
     font-weight: var(--fw-semibold);
   }
   .tutorial-content a:not(.tutorial-pagination__prev):not(.tutorial-pagination__next):hover { text-decoration: underline; }
@@ -4267,7 +4294,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
                     <li><a href="#" class="side-nav__row">Amet consectetur</a></li>
                   </ul>
                 </li>
-                <li class="side-nav__item"><a href="#" class="side-nav__row">Ipsum logging</a></li>
+                <li class="side-nav__item"><a href="#" class="side-nav__row is-active">Ipsum logging</a></li>
                 <li class="side-nav__item"><a href="#" class="side-nav__row">Tempor metrics</a></li>
                 <li class="side-nav__item">
                   <button type="button" class="side-nav__row" aria-expanded="false">
