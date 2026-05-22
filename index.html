@@ -61,10 +61,11 @@
      Customize by editing the <li> items in HTML.
      Mark the current page on each tier with class="is-active".
      ========================================================= */
+  /* Site header — holds the gnav (utility + brand) ONLY. NOT sticky:
+     it scrolls away with the page. The topnav + subnav live as siblings
+     OUTSIDE this <header> so their own position:sticky rules pin them
+     against the body for the whole scroll. */
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
     background: var(--white);
   }
 
@@ -3175,6 +3176,7 @@
       </div>
 
     </div>
+  </header>
 
         <nav class="topnav" aria-label="Primary navigation">
       <div class="topnav__inner">
@@ -3275,7 +3277,6 @@
         </div>
       </div>
     </nav>
-  </header>
 
   <div id="page-home" class="page-view">
 
