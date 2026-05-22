@@ -410,6 +410,35 @@
 a.chip { cursor: pointer; transition: background-color 0.15s ease; }
 a.chip:hover { background: #E1E6EB; }
 
+/* ─── Per-lab chip color treatment ─────────────────────────────
+   On lab pages, all .chip elements pick up the lab's brand color.
+   Scoped by body[data-lab] (set by the router on every route).
+   - Background stays white (replaces the default light-gray fill)
+   - Border in the lab's brand color
+   - Text in the lab's brand color
+   Hover falls back to the base a.chip:hover rule (light gray fill).
+   ───────────────────────────────────────────────────────────── */
+body[data-lab="elasticsearch"] .chip {
+  background: #FFFFFF;
+  border-color: #117F83;
+  color: #118185;
+}
+body[data-lab="observability"] .chip {
+  background: #FFFFFF;
+  border-color: #DD0A73;
+  color: #DD0A73;
+}
+body[data-lab="security"] .chip {
+  background: #FFFFFF;
+  border-color: #C34C37;
+  color: #C34C37;
+}
+body[data-lab="company"] .chip {
+  background: #FFFFFF;
+  border-color: #0B64DD;
+  color: #0B64DD;
+}
+
 /* =========================================================
    Chip — Input variant
    ---------------------------------------------------------
@@ -580,7 +609,6 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   .topnav {
     background: var(--white);
     border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
     color: var(--gray-dark);
   }
   .topnav__inner,
@@ -601,7 +629,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     padding: 0;
     list-style: none;
   }
-  .topnav__list { gap: var(--s-4); }
+  .topnav__list { gap: var(--s-12); }
   .subnav__list { gap: var(--s-24); }
   /* Make [hidden] work on flex containers — UA display:none is overridden
      by the explicit display:flex rule above, so we force it here. */
@@ -619,25 +647,27 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .topnav__link {
     height: 36px;
-    padding: 0 14px;
-    border-radius: 6px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: #F5F7FA;
+    border: 2px solid transparent;
     color: var(--gray-dark);
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .topnav__link:hover {
     background: #EDF1F5;
     color: var(--black);
   }
+  /* Active state: transparent fill, 2px outline in the lab's brand color.
+     Color is driven by data-topnav so each lab gets its own accent. */
   .topnav__link.is-active {
+    background: transparent;
     color: var(--black);
   }
-  .topnav__link.is-active::after {
-    content: '';
-    position: absolute;
-    left: 14px; right: 14px; bottom: -11px;
-    height: 2px;
-    background: var(--black);
-    border-radius: 1px;
-  }
+  .topnav__link.is-active[data-topnav="elasticsearch"] { border-color: #02BCB7; }
+  .topnav__link.is-active[data-topnav="observability"] { border-color: #F04E98; }
+  .topnav__link.is-active[data-topnav="security"]      { border-color: #FA744E; }
+  .topnav__link.is-active[data-topnav="company"]       { border-color: #0B64DD; }
 
   /* ─── Lab dropdown — replaces the 4-tab topnav list on inner/article pages ──
      Shows the current lab as a trigger button; clicking opens a panel listing
@@ -765,6 +795,12 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     height: 2px;
     background: var(--brand-elastic-blue);
   }
+  /* Sub-nav underline color follows the active lab. Matches the 4 brand
+     colors used on the topnav pill outlines (data-topnav). */
+  body[data-lab="elasticsearch"] .subnav__link.is-active::after { background: #02BCB7; }
+  body[data-lab="observability"] .subnav__link.is-active::after { background: #F04E98; }
+  body[data-lab="security"]      .subnav__link.is-active::after { background: #FA744E; }
+  body[data-lab="company"]       .subnav__link.is-active::after { background: #0B64DD; }
   /* Disabled (Company categories): non-interactive, slightly muted */
   .subnav__link.is-disabled {
     color: var(--gray);
@@ -1097,8 +1133,8 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   .series-card:hover .series-card__title { text-decoration: underline; }
   .series-card__desc {
     font-family: var(--font-body);
-    font-size: 15px;
-    line-height: var(--lh-lead);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray-dark);
     margin: 0;
   }
@@ -1323,8 +1359,8 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .cat-card__desc {
     font-family: var(--font-body);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray-dark);
     margin: 0;
   }
@@ -2106,20 +2142,15 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   .related-card__title a:hover { text-decoration: underline; }
   .related-card__desc {
     font-family: var(--font-body);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray-dark);
     margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
   .related-card__author {
     display: flex;
     align-items: center;
     gap: var(--s-12);
-    margin-top: auto;
   }
   .related-card__avatar {
     width: 40px;
@@ -2272,8 +2303,8 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .tutorial-card__desc {
     font-family: var(--font-body);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray);
     margin: 0;
   }
@@ -2416,8 +2447,8 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .integration-card__desc {
     font-family: var(--font-body);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray);
     margin: 0;
   }
@@ -2483,20 +2514,22 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   .side-nav__group-label {
     font-family: var(--font-mono);
     font-weight: var(--fw-semibold);
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--gray);
     margin: 0 0 var(--s-16) 0;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 6px;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 0 6px 0;
     text-align: left;
-    align-self: flex-start;
+    width: 100%;
   }
   .side-nav__group-label .side-nav__chevron {
     width: 10px; height: 10px;
@@ -2683,13 +2716,12 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   .blog-feed__featured-title a:hover { text-decoration: underline; }
   .blog-feed__featured-desc {
     font-family: var(--font-body);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--gray);
     margin: 0;
   }
   .blog-feed__featured-byline {
-    margin-top: auto;
     display: flex;
     align-items: center;
     gap: var(--s-8);
@@ -2734,11 +2766,25 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     background: var(--white);
     padding: var(--s-48) 0 0;
   }
+  /* The border-bottom under the H1 used to sit on __inner directly, which spanned
+     the full 1512px-wide inner including the 64px left padding — visually
+     extending past where the H1 text begins. Now drawn as a pseudo-element so
+     it starts at the H1's left edge (matching the side-nav column below) and
+     extends to the right edge of the inner container. */
   .tag-page-header__inner {
     max-width: 1512px;
     margin: 0 auto;
     padding: 0 var(--s-64) var(--s-32);
-    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .tag-page-header__inner::after {
+    content: '';
+    position: absolute;
+    left: var(--s-64);
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--border);
   }
   .tag-page-header__title {
     font-family: var(--font-heading);
@@ -3333,10 +3379,14 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     margin: 0 auto;
     padding: 0 var(--s-64);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-columns: 280px minmax(0, 1fr);
     gap: var(--s-48);
     align-items: start;
   }
+  /* Aside ("Connect with author") sits on the LEFT visually; main content
+     stays first in source order for a11y/SEO. Order flips at narrow widths. */
+  .obs-filter-layout > main             { order: 2; }
+  .obs-filter-layout > .obs-filter-sidebar { order: 1; }
   .obs-filter-main__title {
     font-family: var(--font-heading);
     font-weight: var(--fw-bold);
@@ -3352,14 +3402,17 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     gap: var(--s-32);
   }
   .obs-filter-sidebar { display: flex; flex-direction: column; gap: var(--s-12); }
+  /* Sidebar label mirrors .side-nav__group-label treatment (font + bottom border). */
   .obs-filter-sidebar__label {
     font-family: var(--font-mono);
-    font-weight: var(--fw-bold);
-    font-size: var(--fs-xs);
-    letter-spacing: 0.02em;
+    font-weight: var(--fw-semibold);
+    font-size: 14px;
+    letter-spacing: 0.08em;
     color: var(--gray);
     margin: 0;
     text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    padding: 0 0 6px 0;
   }
   .obs-filter-sidebar .btn--secondary { justify-content: center; }
 
@@ -3370,6 +3423,9 @@ a.breadcrumb__item:hover { text-decoration: underline; }
 
   @media (max-width: 1100px) {
     .obs-filter-layout { grid-template-columns: 1fr; }
+    /* On narrow screens, main goes ABOVE the sidebar (revert the desktop flip) */
+    .obs-filter-layout > main             { order: 0; }
+    .obs-filter-layout > .obs-filter-sidebar { order: 1; }
     .obs-filter-grid { grid-template-columns: 1fr; }
   }
 
@@ -3527,7 +3583,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
       text-decoration: none; color: var(--text-default);
     }
     .gnav__brand-placeholder {
-      width: 40px; height: 40px; border-radius: 6px;
+      width: 140px; height: 40px; border-radius: 6px;
       background: #E6ECF3;
       display: inline-block; flex-shrink: 0;
     }
@@ -4200,7 +4256,6 @@ a.breadcrumb__item:hover { text-decoration: underline; }
                 <svg class="side-nav__chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="side-nav__list">
-                <li class="side-nav__item"><a href="#" class="side-nav__row is-active">All Articles</a></li>
                 <li class="side-nav__item">
                   <button type="button" class="side-nav__row" aria-expanded="false">
                     Lorem APM
@@ -4510,7 +4565,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
                 <svg class="side-nav__chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="side-nav__list">
-                <li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row is-active">All Integrations</a></li>
+                <li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row">All Integrations</a></li>
                 <li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row">Model Providers</a></li>
                 <li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row">RAG Development Frameworks</a></li>
                 <li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row">ETL and Data Prep</a></li>
@@ -4719,7 +4774,6 @@ a.breadcrumb__item:hover { text-decoration: underline; }
                 <svg class="side-nav__chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="side-nav__list">
-                <li class="side-nav__item"><button type="button" class="side-nav__row">All Blogs</button></li>
                 <li class="side-nav__item is-open">
                   <button type="button" class="side-nav__row" aria-expanded="true">
                     AI
@@ -4863,7 +4917,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
             <div class="related-card__author">
               <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By Quentin Pradet</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
             </div>
           </div>
         </article>
@@ -4878,7 +4932,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
             <div class="related-card__author">
               <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By Kathleen DeRusso</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
             </div>
           </div>
         </article>
@@ -4893,7 +4947,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
             <div class="related-card__author">
               <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By Kathleen DeRusso</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
             </div>
           </div>
         </article>
@@ -4908,7 +4962,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
             <div class="related-card__author">
               <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By Quentin Pradet</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
             </div>
           </div>
         </article>
@@ -5005,7 +5059,6 @@ a.breadcrumb__item:hover { text-decoration: underline; }
                 <svg class="side-nav__chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="side-nav__list">
-                <li class="side-nav__item"><button type="button" class="side-nav__row">All Blogs</button></li>
                 <li class="side-nav__item is-open">
                   <button type="button" class="side-nav__row" aria-expanded="true">
                     AI
@@ -5110,7 +5163,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
             <div class="related-card__author">
               <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By Quentin Pradet</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
             </div>
           </div>
         </article>
@@ -5125,7 +5178,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
             <div class="related-card__author">
               <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By Kathleen DeRusso</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
             </div>
           </div>
         </article>
@@ -5140,7 +5193,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
             <div class="related-card__author">
               <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By Kathleen DeRusso</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
             </div>
           </div>
         </article>
@@ -5155,7 +5208,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
             <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
             <div class="related-card__author">
               <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By Quentin Pradet</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
             </div>
           </div>
         </article>
@@ -5699,7 +5752,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
             <span class="avatar-stack__item">QH</span>
           </div>
           <div class="article-hero__authors">
-            <span class="article-hero__author-line">By Leaf Lin, Tim Brooks, and Quin Hoxie</span>
+            <span class="article-hero__author-line">By <a href="#es-author">Leaf Lin, Tim Brooks, and Quin Hoxie</a></span>
             <span class="article-hero__date">On May 01, 2023</span>
           </div>
         </div>
@@ -5787,7 +5840,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python</p>
           <div class="related-card__author">
             <span class="related-card__avatar">QP</span>
-            <span class="related-card__author-name">Quentin Pradet</span>
+            <span class="related-card__author-name"><a href="#es-author">Quentin Pradet</a></span>
           </div>
         </div>
       </article>
@@ -5804,7 +5857,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to boost vector search performance using SIMD instructions</p>
           <div class="related-card__author">
             <span class="related-card__avatar">CH</span>
-            <span class="related-card__author-name">Chris Hegarty</span>
+            <span class="related-card__author-name"><a href="#es-author">Chris Hegarty</a></span>
           </div>
         </div>
       </article>
@@ -5821,7 +5874,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to reduce ELSER query cost with no recall impact</p>
           <div class="related-card__author">
             <span class="related-card__avatar">KD</span>
-            <span class="related-card__author-name">Kathleen DeRusso</span>
+            <span class="related-card__author-name"><a href="#es-author">Kathleen DeRusso</a></span>
           </div>
         </div>
       </article>
@@ -5936,7 +5989,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python</p>
           <div class="related-card__author">
             <span class="related-card__avatar">QP</span>
-            <span class="related-card__author-name">Quentin Pradet</span>
+            <span class="related-card__author-name"><a href="#es-author">Quentin Pradet</a></span>
           </div>
         </div>
       </article>
@@ -5953,7 +6006,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to boost vector search performance using SIMD instructions</p>
           <div class="related-card__author">
             <span class="related-card__avatar">CH</span>
-            <span class="related-card__author-name">Chris Hegarty</span>
+            <span class="related-card__author-name"><a href="#es-author">Chris Hegarty</a></span>
           </div>
         </div>
       </article>
@@ -5970,7 +6023,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to reduce ELSER query cost with no recall impact</p>
           <div class="related-card__author">
             <span class="related-card__avatar">KD</span>
-            <span class="related-card__author-name">Kathleen DeRusso</span>
+            <span class="related-card__author-name"><a href="#es-author">Kathleen DeRusso</a></span>
           </div>
         </div>
       </article>
@@ -6282,6 +6335,160 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
     </section>
 
   </div><!-- /#page-obs-author -->
+
+  <!-- =================== ELASTICSEARCH LABS AUTHOR PAGE =================== -->
+  <!-- Mirrors #page-obs-author / #page-sec-author exactly; routed via 'es-author'. -->
+  <div id="page-es-author" class="page-view" hidden>
+
+    <section class="author-hero">
+      <div class="author-hero__inner">
+        <img class="author-hero__avatar" src="https://i.pravatar.cc/300?img=8" alt="Author avatar">
+        <div class="author-hero__content">
+          <p class="author-hero__label">BLOG</p>
+          <h1 class="author-hero__title">Author&rsquo;s name</h1>
+          <p class="author-hero__subtitle">Distinguished MLE I &nbsp;|&nbsp; Data and Compute &mdash; Elasticsearch</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="obs-filter-body">
+      <div class="obs-filter-layout">
+
+        <main>
+          <h2 class="obs-filter-main__title">Author&rsquo;s articles</h2>
+          <div class="obs-filter-grid">
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
+            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">QP</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
+            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">KD</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
+            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">QP</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
+            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">KD</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
+            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">QP</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
+            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">KD</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
+            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">QP</span>
+              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
+            </div>
+          </div>
+        </article>
+        <article class="related-card">
+          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
+          <div class="related-card__body">
+            <div class="related-card__meta">
+              <a href="#blog-filter" class="chip">Dolor</a><a href="#blog-filter" class="chip">Sit</a>
+              <span class="related-card__date">May 01, 2023</span>
+            </div>
+            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
+            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
+            <div class="related-card__author">
+              <span class="related-card__avatar">KD</span>
+              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
+            </div>
+          </div>
+        </article>
+          </div>
+        </main>
+
+        <aside class="obs-filter-sidebar">
+          <p class="obs-filter-sidebar__label">Connect with author</p>
+          <a href="#" class="btn--secondary"><span>Subscribe to newsletter</span></a>
+        </aside>
+
+      </div>
+    </section>
+
+  </div><!-- /#page-es-author -->
 
   <div id="page-security" class="page-view" hidden>
 
@@ -6767,7 +6974,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python</p>
           <div class="related-card__author">
             <span class="related-card__avatar">QP</span>
-            <span class="related-card__author-name">Quentin Pradet</span>
+            <span class="related-card__author-name"><a href="#es-author">Quentin Pradet</a></span>
           </div>
         </div>
       </article>
@@ -6784,7 +6991,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to boost vector search performance using SIMD instructions</p>
           <div class="related-card__author">
             <span class="related-card__avatar">CH</span>
-            <span class="related-card__author-name">Chris Hegarty</span>
+            <span class="related-card__author-name"><a href="#es-author">Chris Hegarty</a></span>
           </div>
         </div>
       </article>
@@ -6801,7 +7008,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           <p class="related-card__desc">How to reduce ELSER query cost with no recall impact</p>
           <div class="related-card__author">
             <span class="related-card__avatar">KD</span>
-            <span class="related-card__author-name">Kathleen DeRusso</span>
+            <span class="related-card__author-name"><a href="#es-author">Kathleen DeRusso</a></span>
           </div>
         </div>
       </article>
@@ -8648,6 +8855,7 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
       integration: { view: document.getElementById('page-integration'), subnav: 'integrations', title: 'Integration — Search Labs', lab: 'elasticsearch' },
       blog:         { view: document.getElementById('page-blog'),         subnav: 'blog',         title: 'Blog — Search Labs' },
       'blog-filter':{ view: document.getElementById('page-blog-filter'),  subnav: 'blog',         title: 'Tag — Search Labs', lab: 'elasticsearch' },
+      'es-author':  { view: document.getElementById('page-es-author'),    subnav: 'blog',         title: 'Author — Search Labs', lab: 'elasticsearch' },
       observability:{ view: document.getElementById('page-observability'),subnav: 'obs-home',    title: 'Observability Labs', lab: 'observability', hideNewsletter: true },
       'obs-article':{ view: document.getElementById('page-obs-article'),  subnav: 'obs-home',    title: 'Evaluating search relevance part 2 — Phi-3 as relevance judge — Observability Labs', lab: 'observability', hideNewsletter: true },
       'obs-filter': { view: document.getElementById('page-obs-filter'),   subnav: 'obs-tags',    title: 'Tag — Observability Labs', lab: 'observability' },
@@ -8755,18 +8963,11 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
         a.classList.toggle('is-active', a.getAttribute('data-topnav') === lab);
       });
 
-      // Lab dropdown vs 4-tab topnav:
-      //   - DROPDOWN routes: only true content/article pages — article views,
-      //     integration detail (singular), glossary, and series details (tutorial,
-      //     example which holds the prompt library). Everything else (lab homes,
-      //     list pages like tutorials/examples/integrations/blog, filter pages,
-      //     Company sub-sections) keeps the 4-tab row.
-      var DROPDOWN_ROUTES = {
-        article: 1, 'obs-article': 1, 'sec-article': 1, 'comp-article': 1,
-        integration: 1, glossary: 1,
-        tutorial: 1, example: 1,
-        'blog-filter': 1
-      };
+      // Lab dropdown: feature disabled — every page now uses the original
+      // 4-tab .topnav + per-lab .subnav layout. The .lab-dropdown markup
+      // remains in the DOM but is never shown. To re-enable for specific
+      // routes, add them back here (e.g. article: 1).
+      var DROPDOWN_ROUTES = {};
       var isInnerPage = !!DROPDOWN_ROUTES[name];
       // Body flag for inner pages — drives any inner-page-only CSS
       if (isInnerPage) {
@@ -8951,7 +9152,6 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
           '<div class="side-nav__group">',
             '<button type="button" class="side-nav__group-label" aria-expanded="true">Lorem ipsum', chev, '</button>',
             '<ul class="side-nav__list">',
-              '<li class="side-nav__item"><a href="javascript:void(0)" class="side-nav__row is-active">All Articles</a></li>',
               '<li class="side-nav__item">',
                 '<button type="button" class="side-nav__row" aria-expanded="false">Lorem ipsum', chev, '</button>',
                 '<ul class="side-nav__sublist">',
