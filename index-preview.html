@@ -254,7 +254,7 @@
   --hero-bg-blog:    var(--surface-neutral-1-5);   /* Blog / Tutorials / Examples — uses default lighter gray */
   --hero-bg-obs:     #E8ECF1;   /* Observability — slight cool gray, preserved from prior literal on obs-home */
   --hero-bg-sec:     #EBEFF3;   /* Security — slight cool gray, preserved from prior literal on sec-home */
-  --hero-bg-news:    #F5F1EA;   /* News — warm beige, distinct from blue-tinted family above */
+  --hero-bg-news:    #F1F4F8;   /* News — unified neutral gray (matches surface-neutral-1-5), replaces prior warm beige */
 
   --primary:        var(--brand-elastic-yellow);       /*   1 use */
   --primary-dark:   var(--brand-elastic-yellow-dark);  /*   1 use */
@@ -656,13 +656,13 @@ a.breadcrumb__item:hover { text-decoration: underline; }
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .topnav__link:hover {
-    background: #EDF1F5;
+    background: #E4E8EE;
     color: var(--black);
   }
   /* Active state: transparent fill, 2px outline in the lab's brand color.
      Color is driven by data-topnav so each lab gets its own accent. */
   .topnav__link.is-active {
-    background: transparent;
+    background: var(--white);
     color: var(--black);
   }
   .topnav__link.is-active[data-topnav="elasticsearch"] { border-color: #02BCB7; }
