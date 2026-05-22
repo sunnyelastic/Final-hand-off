@@ -396,6 +396,35 @@
 a.chip { cursor: pointer; transition: background-color 0.15s ease; }
 a.chip:hover { background: #E1E6EB; }
 
+/* ─── Per-lab chip color treatment ─────────────────────────────
+   On lab pages, all .chip elements pick up the lab's brand color.
+   Scoped by body[data-lab] (set by the router on every route).
+   - Background stays white (replaces the default light-gray fill)
+   - Border in the lab's brand color
+   - Text in the lab's brand color
+   Hover falls back to the base a.chip:hover rule (light gray fill).
+   ───────────────────────────────────────────────────────────── */
+body[data-lab="elasticsearch"] .chip {
+  background: #FFFFFF;
+  border-color: #117F83;
+  color: #118185;
+}
+body[data-lab="observability"] .chip {
+  background: #FFFFFF;
+  border-color: #DD0A73;
+  color: #DD0A73;
+}
+body[data-lab="security"] .chip {
+  background: #FFFFFF;
+  border-color: #C34C37;
+  color: #C34C37;
+}
+body[data-lab="company"] .chip {
+  background: #FFFFFF;
+  border-color: #0B64DD;
+  color: #0B64DD;
+}
+
 /* =========================================================
    Chip — Input variant
    ---------------------------------------------------------
