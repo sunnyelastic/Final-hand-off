@@ -247,6 +247,16 @@
   --yellow-light:   var(--brand-elastic-yellow-light); /*   0 uses */
   --blue:           var(--brand-elastic-blue);         /*  22 uses */
 
+  /* ─── LAB ACCENT ───────────────────────────────────────────
+     Default link / active-state color, switched per-lab via
+     body[data-lab="..."] overrides below the chip rules.
+     Used on: article body links, side-nav active item, TOC
+     active, sidebar active, filter-pill active, pagination
+     active, integration-detail bloglist hover, tutorial-content
+     links. The fallback (no data-lab) keeps Elastic Blue. */
+  --lab-accent:     var(--blue);
+
+
 
   /* ─── TYPOGRAPHY — FAMILIES ────────────────────────────────
      Mier B is the Elastic brand heading typeface (10 weights
@@ -382,7 +392,7 @@
   border: 1px solid rgba(29, 31, 38, 0.2);
   border-radius: var(--r-full);
   font-family: var(--font-body);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
   font-size: 14px;
   line-height: 1.4;
   color: #404152;
@@ -406,7 +416,7 @@ a.chip:hover { background: #E1E6EB; }
    ───────────────────────────────────────────────────────────── */
 body[data-lab="elasticsearch"] .chip {
   background: #FFFFFF;
-  border-color: #117F83;
+  border-color: #118185;
   color: #118185;
 }
 body[data-lab="observability"] .chip {
@@ -424,6 +434,18 @@ body[data-lab="company"] .chip {
   border-color: #0B64DD;
   color: #0B64DD;
 }
+
+/* ─── Per-lab link / active-state accent ───────────────────────
+   Switches --lab-accent based on which lab the user is on.
+   Colors match the chip palette (unified per-lab color used everywhere).
+   All selectors using `var(--lab-accent)` will recolor without
+   any per-selector overrides needed.
+
+   ───────────────────────────────────────────────────────────── */
+body[data-lab="elasticsearch"] { --lab-accent: #118185; }
+body[data-lab="observability"] { --lab-accent: #DD0A73; }
+body[data-lab="security"]      { --lab-accent: #C34C37; }
+body[data-lab="company"]       { --lab-accent: #0B64DD; }
 
 /* =========================================================
    Chip — Input variant
@@ -527,7 +549,7 @@ body[data-lab="company"] .chip {
 }
 a.breadcrumb__item:hover { text-decoration: underline; }
 .breadcrumb__item--current {
-  color: var(--brand-elastic-blue);
+  color: var(--lab-accent);
   cursor: default;
 }
 .breadcrumb__sep {
