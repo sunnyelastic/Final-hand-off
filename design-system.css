@@ -240,7 +240,7 @@
   --hero-bg-blog:    var(--surface-neutral-1-5);   /* Blog / Tutorials / Examples — uses default lighter gray */
   --hero-bg-obs:     #E8ECF1;   /* Observability — slight cool gray, preserved from prior literal on obs-home */
   --hero-bg-sec:     #EBEFF3;   /* Security — slight cool gray, preserved from prior literal on sec-home */
-  --hero-bg-news:    #F5F1EA;   /* News — warm beige, distinct from blue-tinted family above */
+  --hero-bg-news:    #F1F4F8;   /* News — unified neutral gray (matches surface-neutral-1-5), replaces prior warm beige */
 
   --primary:        var(--brand-elastic-yellow);       /*   1 use */
   --primary-dark:   var(--brand-elastic-yellow-dark);  /*   1 use */
