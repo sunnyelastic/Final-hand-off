@@ -404,7 +404,6 @@
   background: transparent;
 }
 a.chip { cursor: pointer; transition: background-color 0.15s ease; }
-a.chip:hover { background: #E1E6EB; }
 
 /* ─── Per-lab chip color treatment ─────────────────────────────
    On lab pages, all .chip elements pick up the lab's brand color.
@@ -412,12 +411,12 @@ a.chip:hover { background: #E1E6EB; }
    - Background stays white (replaces the default light-gray fill)
    - Border in the lab's brand color
    - Text in the lab's brand color
-   Hover falls back to the base a.chip:hover rule (light gray fill).
+   Hover applies a 15% tint of the lab accent (see a.chip:hover above).
    ───────────────────────────────────────────────────────────── */
 body[data-lab="elasticsearch"] .chip {
   background: #FFFFFF;
-  border-color: #118185;
-  color: #118185;
+  border-color: #0F7478;
+  color: #0F7478;
 }
 body[data-lab="observability"] .chip {
   background: #FFFFFF;
@@ -426,13 +425,39 @@ body[data-lab="observability"] .chip {
 }
 body[data-lab="security"] .chip {
   background: #FFFFFF;
-  border-color: #C34C37;
-  color: #C34C37;
+  border-color: #B54633;
+  color: #B54633;
 }
 body[data-lab="company"] .chip {
   background: #FFFFFF;
   border-color: #0B64DD;
   color: #0B64DD;
+}
+
+/* ─── Chip hover — per-lab tinted background ─────────────────────
+   Each lab uses a brighter "accent-light" shade tinted on hover.
+   Opacities match the search_labs theme SVG specs exactly:
+     - Elasticsearch: 15% #02BCB7 (bright teal)
+     - Observability:  8% #F04E98 (brighter pink, lighter tint)
+     - Security:      15% #FA744E (bright orange)
+     - News/Company:  15% #0B64DD (no design ref, kept consistent)
+   Placed AFTER the per-lab background:white rules so it wins on
+   source order (specificity ties otherwise). */
+body[data-lab="elasticsearch"] .chip:hover {
+  background: color-mix(in srgb, #02BCB7 15%, #FFFFFF);
+}
+body[data-lab="observability"] .chip:hover {
+  background: color-mix(in srgb, #F04E98 8%, #FFFFFF);
+}
+body[data-lab="security"] .chip:hover {
+  background: color-mix(in srgb, #FA744E 15%, #FFFFFF);
+}
+body[data-lab="company"] .chip:hover {
+  background: color-mix(in srgb, #0B64DD 15%, #FFFFFF);
+}
+/* Fallback for pages with no data-lab attribute */
+.chip:hover {
+  background: color-mix(in srgb, #02BCB7 15%, #FFFFFF);
 }
 
 /* ─── Per-lab link / active-state accent ───────────────────────
