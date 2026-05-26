@@ -668,7 +668,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   /* Topnav inner sits 14px tighter than .container so the FIRST PILL'S TEXT
      (offset by its 14px internal padding) aligns with the gnav logo at 64px. */
-  .topnav__inner  { height: 56px; padding: 0 calc(var(--s-64) - 14px); }
+  .topnav__inner  { padding: 28px calc(var(--s-64) - 14px) 12px; }
   .subnav__inner  { height: 48px; padding: 0 var(--s-64); }
   .topnav__list,
   .subnav__list {
@@ -820,7 +820,7 @@ a.breadcrumb__item:hover { text-decoration: underline; }
   }
   .subnav {
     position: sticky;
-    top: 56px; /* topnav__inner height */
+    top: 76px; /* topnav__inner height: 28 top pad + 36 pill + 12 bottom pad */
     z-index: 49;
   }
   /* Remove the hairline under the secondary nav per Session 53 */
