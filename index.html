@@ -84,7 +84,7 @@
   }
   /* Topnav inner sits 14px tighter than .container so the FIRST PILL'S TEXT
      (offset by its 14px internal padding) aligns with the gnav logo at 64px. */
-  .topnav__inner  { height: 56px; padding: 0 calc(var(--s-64) - 14px); }
+  .topnav__inner  { padding: 28px calc(var(--s-64) - 14px) 12px; }
   .subnav__inner  { height: 48px; padding: 0 var(--s-64); }
   .topnav__list,
   .subnav__list {
@@ -236,7 +236,7 @@
   }
   .subnav {
     position: sticky;
-    top: 56px; /* topnav__inner height */
+    top: 76px; /* topnav__inner height: 28 top pad + 36 pill + 12 bottom pad */
     z-index: 49;
   }
   /* Remove the hairline under the secondary nav per Session 53 */
@@ -3141,6 +3141,99 @@
       .gnav__search { padding: 0 var(--s-12); }
       .gnav__marquee-text { display: none; }
     }
+
+  /* =========================================================
+     Blog filter page — lab switcher
+     ---------------------------------------------------------
+     Side-nav lab buttons swap which .blog-grid[data-lab-cards]
+     is visible. Each lab grid has 3 cards in a 3×1 row.
+     Cards are styled with that lab's brand accent (chip color,
+     image tint, avatar ring, title hover).
+     ========================================================= */
+
+  /* 3-column grid on the filter page */
+  #page-blog-filter .blog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Tighter side-nav rail, same as obs-filter */
+  #page-blog-filter .blog-layout {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--s-32);
+    padding-right: 0;
+  }
+
+  /* Show/hide lab card sets */
+  .blog-grid[data-lab-cards] { display: none; }
+  .blog-grid[data-lab-cards].is-active { display: grid; }
+
+  /* ── Elasticsearch (teal) ───────────────────────────────── */
+  .blog-grid[data-lab-cards="elasticsearch"] .related-card__image {
+    background: color-mix(in srgb, #02BCB7 18%, #F1F4F8);
+    border-color: color-mix(in srgb, #02BCB7 30%, #C4C7D1);
+  }
+  .blog-grid[data-lab-cards="elasticsearch"] .chip {
+    background: #fff; border-color: #0F7478; color: #0F7478;
+  }
+  .blog-grid[data-lab-cards="elasticsearch"] .chip:hover {
+    background: color-mix(in srgb, #02BCB7 15%, #fff);
+  }
+  .blog-grid[data-lab-cards="elasticsearch"] .related-card__title a:hover { color: #0F7478; }
+  .blog-grid[data-lab-cards="elasticsearch"] .related-card__avatar {
+    background: color-mix(in srgb, #02BCB7 15%, #fff);
+    color: #0F7478;
+  }
+
+  /* ── Observability (pink) ───────────────────────────────── */
+  .blog-grid[data-lab-cards="observability"] .related-card__image {
+    background: color-mix(in srgb, #F04E98 15%, #F1F4F8);
+    border-color: color-mix(in srgb, #F04E98 30%, #C4C7D1);
+  }
+  .blog-grid[data-lab-cards="observability"] .chip {
+    background: #fff; border-color: #DD0A73; color: #DD0A73;
+  }
+  .blog-grid[data-lab-cards="observability"] .chip:hover {
+    background: color-mix(in srgb, #F04E98 10%, #fff);
+  }
+  .blog-grid[data-lab-cards="observability"] .related-card__title a:hover { color: #DD0A73; }
+  .blog-grid[data-lab-cards="observability"] .related-card__avatar {
+    background: color-mix(in srgb, #F04E98 12%, #fff);
+    color: #DD0A73;
+  }
+
+  /* ── Security (orange-red) ──────────────────────────────── */
+  .blog-grid[data-lab-cards="security"] .related-card__image {
+    background: color-mix(in srgb, #FA744E 15%, #F1F4F8);
+    border-color: color-mix(in srgb, #FA744E 30%, #C4C7D1);
+  }
+  .blog-grid[data-lab-cards="security"] .chip {
+    background: #fff; border-color: #B54633; color: #B54633;
+  }
+  .blog-grid[data-lab-cards="security"] .chip:hover {
+    background: color-mix(in srgb, #FA744E 15%, #fff);
+  }
+  .blog-grid[data-lab-cards="security"] .related-card__title a:hover { color: #B54633; }
+  .blog-grid[data-lab-cards="security"] .related-card__avatar {
+    background: color-mix(in srgb, #FA744E 15%, #fff);
+    color: #B54633;
+  }
+
+  /* ── News / Company (blue) ──────────────────────────────── */
+  .blog-grid[data-lab-cards="news"] .related-card__image {
+    background: color-mix(in srgb, #0B64DD 12%, #F1F4F8);
+    border-color: color-mix(in srgb, #0B64DD 25%, #C4C7D1);
+  }
+  .blog-grid[data-lab-cards="news"] .chip {
+    background: #fff; border-color: #0B64DD; color: #0B64DD;
+  }
+  .blog-grid[data-lab-cards="news"] .chip:hover {
+    background: color-mix(in srgb, #0B64DD 10%, #fff);
+  }
+  .blog-grid[data-lab-cards="news"] .related-card__title a:hover { color: #0B64DD; }
+  .blog-grid[data-lab-cards="news"] .related-card__avatar {
+    background: color-mix(in srgb, #0B64DD 12%, #fff);
+    color: #0B64DD;
+  }
 </style>
 </head>
 <body>
@@ -4545,10 +4638,10 @@
                 <svg class="side-nav__chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="side-nav__list">
-                <li class="side-nav__item"><button type="button" class="side-nav__row is-active">Elasticsearch lab</button></li>
-                <li class="side-nav__item"><button type="button" class="side-nav__row">Observability Lab</button></li>
-                <li class="side-nav__item"><button type="button" class="side-nav__row">Security labs</button></li>
-                <li class="side-nav__item"><button type="button" class="side-nav__row">News</button></li>
+                <li class="side-nav__item"><button type="button" class="side-nav__row is-active" data-filter-lab="elasticsearch">Elasticsearch lab</button></li>
+                <li class="side-nav__item"><button type="button" class="side-nav__row" data-filter-lab="observability">Observability Lab</button></li>
+                <li class="side-nav__item"><button type="button" class="side-nav__row" data-filter-lab="security">Security labs</button></li>
+                <li class="side-nav__item"><button type="button" class="side-nav__row" data-filter-lab="news">News</button></li>
               </ul>
             </div>
 
@@ -4632,84 +4725,204 @@
 
           </nav>
         </aside>
-        <main class="blog-feed">
-          <article class="blog-feed__featured">
-            <div class="blog-feed__featured-content">
-              <div class="blog-feed__featured-meta">
-                <a class="chip" href="#blog-filter">Lorem</a>
-                <span class="related-card__date">May 01, 2023</span>
+        <main class="blog-feed" id="blog-filter-feed">
+
+          <!-- ── Elasticsearch lab cards (teal) — default active ── -->
+          <div class="blog-grid is-active" data-lab-cards="elasticsearch">
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Vector Search</a>
+                  <span class="related-card__date">May 12, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Speeding Up Multi-graph Vector Search with HNSW Optimizations</a></h3>
+                <p class="related-card__desc">How we reduced approximate kNN query latency by 40% across billion-scale corpora using layered graph pruning.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">MS</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Mayya Sharipova</a></span>
+                </div>
               </div>
-              <h3 class="blog-feed__featured-title"><a href="#article">Speeding Up Multi-graph Vector Search</a></h3>
-              <p class="blog-feed__featured-desc">Officia deserunt mollit anim id est laborum sed ut perspiciatis unde omnis iste natus</p>
-              <div class="related-card__author">
-                <span class="related-card__avatar">MS</span>
-                <span class="related-card__author-name">By Mayya Sharipova and Thomas Veasey</span>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">ES|QL</a><a class="chip" href="#blog-filter">Python</a>
+                  <span class="related-card__date">May 05, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Exporting ES|QL Query Results as Pandas DataFrames</a></h3>
+                <p class="related-card__desc">A practical guide to piping ES|QL output directly into Pandas for downstream analysis and visualisation.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">QP</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
+                </div>
               </div>
-            </div>
-            <div class="blog-feed__featured-image" role="img" aria-label="Featured article image placeholder"></div>
-          </article>
-          <div class="blog-grid">
-        <article class="related-card">
-          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
-          <div class="related-card__body">
-            <div class="related-card__meta">
-              <a class="chip" href="#blog-filter">Ipsum</a><a class="chip" href="#blog-filter">Lorem</a>
-              <span class="related-card__date">May 01, 2023</span>
-            </div>
-            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
-            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
-            <div class="related-card__author">
-              <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
-            </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Hybrid Search</a>
+                  <span class="related-card__date">Apr 28, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Improving Text Expansion Recall Without Sacrificing Latency</a></h3>
+                <p class="related-card__desc">Techniques for making ELSER queries faster at scale while retaining high recall on out-of-domain corpora.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">KD</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
-        <article class="related-card">
-          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
-          <div class="related-card__body">
-            <div class="related-card__meta">
-              <a class="chip" href="#blog-filter">Ipsum</a><a class="chip" href="#blog-filter">Lorem</a>
-              <span class="related-card__date">May 01, 2023</span>
-            </div>
-            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
-            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
-            <div class="related-card__author">
-              <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
-            </div>
+
+          <!-- ── Observability lab cards (pink) ── -->
+          <div class="blog-grid" data-lab-cards="observability">
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">APM</a>
+                  <span class="related-card__date">May 15, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Distributed Tracing at Scale: Lessons from 10 Billion Spans a Day</a></h3>
+                <p class="related-card__desc">How our team restructured trace ingestion pipelines to handle 10× traffic spikes without data loss.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">AL</span>
+                  <span class="related-card__author-name">By <a href="#obs-author">Adrien Lauer</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Logs</a><a class="chip" href="#blog-filter">ML</a>
+                  <span class="related-card__date">May 08, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Log Anomaly Detection Using Elastic's Built-in ML Jobs</a></h3>
+                <p class="related-card__desc">A step-by-step walkthrough for configuring unsupervised anomaly detection on structured log streams.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">SK</span>
+                  <span class="related-card__author-name">By <a href="#obs-author">Sophia Kim</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Infrastructure</a>
+                  <span class="related-card__date">Apr 30, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Kubernetes Node Metrics: What to Monitor and Why</a></h3>
+                <p class="related-card__desc">A curated guide to the 12 Kubernetes node metrics that matter most for capacity planning and incident response.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">MR</span>
+                  <span class="related-card__author-name">By <a href="#obs-author">Marco Russo</a></span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
-        <article class="related-card">
-          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
-          <div class="related-card__body">
-            <div class="related-card__meta">
-              <a class="chip" href="#blog-filter">Ipsum</a><a class="chip" href="#blog-filter">Lorem</a>
-              <span class="related-card__date">May 01, 2023</span>
-            </div>
-            <h3 class="related-card__title"><a href="#article">Sed do eiusmod tempor incididunt ut labore et dolore magna</a></h3>
-            <p class="related-card__desc">How to improve the performance of text expansion queries by making them more efficient without sacrificing recall</p>
-            <div class="related-card__author">
-              <span class="related-card__avatar">KD</span>
-              <span class="related-card__author-name">By <a href="#es-author">Kathleen DeRusso</a></span>
-            </div>
+
+          <!-- ── Security lab cards (orange-red) ── -->
+          <div class="blog-grid" data-lab-cards="security">
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Threat Hunting</a>
+                  <span class="related-card__date">May 14, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Hunting Lateral Movement with EQL Sequence Queries</a></h3>
+                <p class="related-card__desc">Using EQL's sequence syntax to chain process, network, and file events into a complete lateral movement detection rule.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">JB</span>
+                  <span class="related-card__author-name">By <a href="#sec-author">Jake Baines</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">SIEM</a><a class="chip" href="#blog-filter">AI</a>
+                  <span class="related-card__date">May 06, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">AI-Assisted Alert Triage in Elastic Security</a></h3>
+                <p class="related-card__desc">How the new AI triage assistant reduces mean time to investigate by grouping and ranking alerts by campaign.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">RN</span>
+                  <span class="related-card__author-name">By <a href="#sec-author">Ramona Nichols</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Malware</a>
+                  <span class="related-card__date">Apr 22, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Reversing a New Loader Family Targeting Finance Sector</a></h3>
+                <p class="related-card__desc">A deep-dive into a loader observed in the wild, including unpacking routines, C2 beaconing patterns, and detection logic.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">DW</span>
+                  <span class="related-card__author-name">By <a href="#sec-author">Daniel Weiss</a></span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
-        <article class="related-card">
-          <div class="related-card__image" role="img" aria-label="Article image placeholder"></div>
-          <div class="related-card__body">
-            <div class="related-card__meta">
-              <a class="chip" href="#blog-filter">Ipsum</a><a class="chip" href="#blog-filter">Lorem</a>
-              <span class="related-card__date">May 01, 2023</span>
-            </div>
-            <h3 class="related-card__title"><a href="#article">Quis autem vel eum iure reprehenderit qui</a></h3>
-            <p class="related-card__desc">How to export ES|QL queries as Pandas dataframes in Python.</p>
-            <div class="related-card__author">
-              <span class="related-card__avatar">QP</span>
-              <span class="related-card__author-name">By <a href="#es-author">Quentin Pradet</a></span>
-            </div>
+
+          <!-- ── News / Company cards (blue) ── -->
+          <div class="blog-grid" data-lab-cards="news">
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Release</a>
+                  <span class="related-card__date">May 13, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">Elasticsearch 9.2: Faster Indexing, Smarter Routing, Leaner Storage</a></h3>
+                <p class="related-card__desc">What's new in 9.2 — including the segment-level routing overhaul, improved merge scheduling, and the new zstd codec default.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">EL</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Elastic Team</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Community</a><a class="chip" href="#blog-filter">Events</a>
+                  <span class="related-card__date">May 02, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">ElasticON 2026: Highlights, Recordings, and What's Next</a></h3>
+                <p class="related-card__desc">A recap of the biggest sessions from this year's ElasticON, plus links to recordings and slide decks for everything you missed.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">PR</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Product &amp; Relations</a></span>
+                </div>
+              </div>
+            </article>
+            <article class="related-card">
+              <div class="related-card__image" role="img" aria-label="Article image"></div>
+              <div class="related-card__body">
+                <div class="related-card__meta">
+                  <a class="chip" href="#blog-filter">Inside Elastic</a>
+                  <span class="related-card__date">Apr 25, 2026</span>
+                </div>
+                <h3 class="related-card__title"><a href="#article">How Elastic Migrated 2 Petabytes of Internal Logs to Serverless</a></h3>
+                <p class="related-card__desc">The story behind moving our internal observability workloads to Elastic Cloud Serverless — what worked, what surprised us.</p>
+                <div class="related-card__author">
+                  <span class="related-card__avatar">CS</span>
+                  <span class="related-card__author-name">By <a href="#es-author">Chris Simmons</a></span>
+                </div>
+              </div>
+            </article>
           </div>
-        </article>
-          </div>
+
           <div class="pagination">
             <button aria-label="Previous page">‹</button>
             <button class="is-active">1</button>
@@ -8852,6 +9065,36 @@ filled_prompt = PROMPT_TEMPLATE.<span class="tok-function">replace</span>(<span 
 
     window.addEventListener('hashchange', route);
     route();
+
+    // ─── Blog filter page — lab side-nav switcher ────────────────────────────
+    // When a lab button in #page-blog-filter's side-nav is clicked:
+    //   1. Move is-active to the clicked button
+    //   2. Show the matching blog-grid[data-lab-cards], hide the rest
+    document.addEventListener('click', function (e) {
+      var filterPage = document.getElementById('page-blog-filter');
+      if (!filterPage || filterPage.hidden) return;
+
+      var btn = e.target.closest('#page-blog-filter .side-nav__item [data-filter-lab]');
+      if (!btn) return;
+
+      var lab = btn.getAttribute('data-filter-lab');
+      if (!lab) return;
+
+      e.preventDefault();
+
+      // Update active state on all lab nav buttons
+      var allLabBtns = filterPage.querySelectorAll('[data-filter-lab]');
+      for (var i = 0; i < allLabBtns.length; i++) {
+        allLabBtns[i].classList.remove('is-active');
+      }
+      btn.classList.add('is-active');
+
+      // Swap card grids
+      var grids = filterPage.querySelectorAll('.blog-grid[data-lab-cards]');
+      for (var j = 0; j < grids.length; j++) {
+        grids[j].classList.toggle('is-active', grids[j].getAttribute('data-lab-cards') === lab);
+      }
+    });
 
     // ─── Lab dropdown — open/close on trigger click, close on outside click ──
     document.addEventListener('click', function (e) {
